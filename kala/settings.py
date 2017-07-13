@@ -24,7 +24,7 @@ SECRET_KEY = 'f!ucv8g!os5fh1hzl1s0ipe#@wdbf*!mqcxbx!1izll3j_zmry'
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [unicode('kalafitness.pythonanywhere.com')]
 
 # Application definition
 
@@ -82,22 +82,15 @@ WSGI_APPLICATION = 'kala.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'gestionhc',
-         'USER': 'b39a26ea8a2c83',
-         'PASSWORD': '49e6b5e4',
-         'HOST': 'us-cdbr-azure-southcentral-f.cloudapp.net',   # Or an IP Address that your DB is hosted on
-         'PORT': '3306',
-     },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'kalaapp',
-    #     'USER': 'root',
-    #     'PASSWORD': '',
-    #     'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-    #     'PORT': '3307',
-    # }
+
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kalaFitness$default',
+        'USER': 'kalaFitness',
+        'PASSWORD': 'escuela123',
+        'HOST': 'kalaFitness.mysql.pythonanywhere-services.com',
+    }
+
 }
 
 
