@@ -1,19 +1,27 @@
-{%  extends 'personal/base.html' %}
-{% block title %}Personal{% endblock %}
-{% block body %}
+{% extends 'blank.html' %}
+{% load l10n %}
+{% block title %}Detalles{% endblock %}
+{% block content %}
+<div id="page-wrapper">
+    <div class="container-fluid songs-container">
+        <div class="panel panel-default" style="margin-top: 40px">
 
-<div class="container-fluid songs-container">
-
-    <div class="row">
+            <div class="panel-body">
+                <div class="row">
 
         <!-- Info izquierda -->
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <a href="{% url 'personal:detail' personal.id %}">
-                            <img src="https://cdn4.iconfinder.com/data/icons/line-user/512/user_info-512.png" class="img-responsive">
+                        {% if personal.foto %}
+                            <img src="/static/{{ personal.foto }}" class="img-rounded img-responsive">
+                        {% else %}
+                            <img src="/static/usuario/noimagen.jpg" class="img-rounded img-responsive">
+                        {% endif %}
                     </a>
-                    <h1>{{ personal.nombre }} <small>{{ personal.id}}</small></h1> <h1>{{ personal.apellido }}</h1>
+                    <h3>{{ personal.id}}</h3>
+                    <h1>{{ personal.nombre }} {{ personal.apellido }}</h1>
                 </div>
             </div>
         </div>
@@ -75,6 +83,10 @@
     </div>
 
 </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
 

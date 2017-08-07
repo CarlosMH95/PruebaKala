@@ -29,19 +29,25 @@ ALLOWED_HOSTS = [unicode('kalafitness.pythonanywhere.com')]
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'corsheaders',
+    'directmessages',
+    'django_forms_bootstrap',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "directmessages",
     'kalaapp.apps.KalaappConfig',
-    'paciente.apps.PacienteConfig',
     'personal.apps.PersonalConfig',
+    'paciente.apps.PacienteConfig',
     'factura.apps.FacturaConfig',
-
+    'diagnostico.apps.DiagnosticoConfig',
+    'fisioterapia.apps.FisioterapiaConfig',
+    'nutricion.apps.NutricionConfig',
+    'clienteRest.apps.ClienterestConfig',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +67,7 @@ ROOT_URLCONF = 'kala.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'static/sb-admin/pages')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +80,16 @@ TEMPLATES = [
         },
     },
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' #'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'kalafitnessapp@emailserver2017'
+EMAIL_HOST_USER = 'kalafitnessapp@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 
 WSGI_APPLICATION = 'kala.wsgi.application'
 
@@ -122,8 +138,21 @@ PASSWORD_HASHERS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'auth.User'
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
 #AUTH_USER_MODEL = 'kalaapp.Usuario'
 
 LANGUAGE_CODE = 'es'
@@ -143,10 +172,9 @@ DATE_INPUT_FORMATS = ['%d/%m/%Y','%d-%m-%Y']
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR + STATIC_URL + 'media/'
-MEDIA_URL  = STATIC_URL + 'media/'
+RES_URL = BASE_DIR + STATIC_URL + 'sb-admin/'
 
-
-#STATICFILES_DIRS = [STATIC_URL, MEDIA_ROOT, MEDIA_URL,]
+STATICFILES_DIRS = [MEDIA_ROOT, RES_URL]
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
 
