@@ -4,7 +4,7 @@ from .settings import *
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kalafitness.pythonanywhere.com', '*']
 
 INSTALLED_APPS += (
     'debug_toolbar',

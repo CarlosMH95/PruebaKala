@@ -24,7 +24,7 @@ SECRET_KEY = 'f!ucv8g!os5fh1hzl1s0ipe#@wdbf*!mqcxbx!1izll3j_zmry'
 
 DEBUG = False
 
-ALLOWED_HOSTS = [unicode('kalafitness.pythonanywhere.com')]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
