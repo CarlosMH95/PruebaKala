@@ -17,16 +17,6 @@ from django.utils.six import StringIO
 from PIL import Image
 from django.conf import settings
 from django.contrib import messages
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
 
 
 class TimeModel(models.Model):
@@ -84,10 +74,9 @@ class Usuario(TimeModel):
         # if fotoExtension not in settings.IMAGE_FILE_TYPES:
         #     form.add_error('foto', 'Imagen no valida, solo las siguientes extensiones son permitidas: %s' % ', '.join(
         #             settings.IMAGE_FILE_TYPES))
-        print self.foto
+
         if self.foto and self.foto.name.find('noimagen.jpg') == -1:
             try:
-                print self.foto
                 img = Image.open(self.foto)
                 width, height = img.size
                 basewidth = 600
@@ -111,7 +100,7 @@ class Usuario(TimeModel):
                 output.seek(0)
                 self.foto = InMemoryUploadedFile(output, 'foto', "%s.jpg" % self.cedula, 'image/jpeg', output.len, None)
             except Exception as e:
-                print str(e) + 'No se puedo guardar la foto'
+                print str(e) + ' Error al  guardar la foto'
 
         super(Usuario, self).save(*args, **kwargs)
 
