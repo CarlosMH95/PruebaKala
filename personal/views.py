@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404
+from kala.views import enviar_password_email, generar_password
 from django.contrib.auth.models import User
 from kalaapp.models import Usuario, Rol
 from paciente.models import Paciente
@@ -151,11 +152,29 @@ def verMensajes(request):
         mensajesN = []
         for m in mensajes:
             if m.read_at == None:
-                usuario=Usuario.objects.get(usuario=m.sender)
-                nombre=usuario.nombre +" "+ usuario.apellido
-                nombresN.append(nombre)
-                usuariosN.append(usuario)
-                mensajesN.append(m)
+                try:
+                    print "entro"
+                    usuario=Usuario.objects.get(usuario=m.sender)
+                    nombre = usuario.nombre + " " + usuario.apellido
+                    nombresN.append(nombre)
+                    usuariosN.append(usuario)
+                    mensajesN.append(m)
+                except:
+                    print "entro2"
+                    usuario= Usuario()
+                    usuario.estado="I"
+                    usuario.usuario=m.sender
+                    usuario.nombre="Administrador"
+                    usuario.apellido="Kala"
+                    usuario.cedula="0922658845"
+                    rol = Rol.objects.filter(tipo='administrador').first()
+                    usuario.rol=rol
+                    usuario.save()
+                    nombre = usuario.nombre + " " + usuario.apellido
+                    nombresN.append(nombre)
+                    usuariosN.append(usuario)
+                    mensajesN.append(m)
+
             else:
                 usuario = Usuario.objects.get(usuario=m.sender)
                 nombre = usuario.nombre + " " + usuario.apellido
@@ -244,7 +263,7 @@ def nuevoMensajePersonal(request):
 
         to = Usuario.objects.get(pk=para)
         #to_user=to.usuario
-        to_user=User.object.get(username=to.usuario)
+        to_user=to.usuario
         print to_user
 
         Inbox.send_message(request.user, to_user, form.cleaned_data["mensaje"])
