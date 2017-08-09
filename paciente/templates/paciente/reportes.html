@@ -1,0 +1,165 @@
+{% extends 'blank.html' %}
+{% load l10n %}
+{% load static %}
+{% block title %}Reportes {% endblock %}
+{% block content %}
+<div id="page-wrapper">
+<div class="container-fluid">
+    <!-- Boton Reporte -->
+    <div>
+      <button id="totales" type="button" class="btn">Pacientes totales</button>
+    </div>
+    <div>
+      <button id="hombres" type="button" class="btn">Pacientes hombres</button>
+    </div>
+    <div>
+      <button id="mujeres" type="button" class="btn">Pacientes mujeres</button>
+    </div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.20/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.20/vfs_fonts.js"></script>
+<script>
+  function body(pacientes){
+    var body = [
+        [
+            {text: 'Cedula', style: 'subItem'
+            }, {text: 'Nombre', style: 'subItem'
+            }, {text: 'Apellido', style: 'subItem'
+            }, {text: 'Telefono', style: 'subItem'
+            }, {text: 'Genero', style: 'subItem'
+            }
+        ]
+    ]
+
+    pacientes.forEach(function(paciente){
+        body.push(
+            [
+                {text:
+                    (function(){
+                        if (paciente.cedula) { return paciente.cedula;}
+                        return "";
+                    })()
+
+                },{text:
+                    (function(){
+                        if (paciente.nombre) { return paciente.nombre;}
+                        return "";
+                    })()
+
+                },{text:
+                    (function(){
+                        if (paciente.apellido) { return paciente.apellido;}
+                        return "";
+                    })()
+                },{text:
+                    (function(){
+                        if (paciente.telefono) { return paciente.telefono;}
+                        return "";
+                    })()
+                },{text:
+                    (function(){
+                        if (paciente.genero) { return paciente.genero;}
+                        return "";
+                    })()
+                }
+            ]
+        );
+    });
+    return body;
+  }
+
+  function pdf(pacientes){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+        dd='0'+dd
+    }
+    if(mm<10) {
+        mm='0'+mm
+    }
+    today = mm+'/'+dd+'/'+yyyy;
+
+    var pdf = {
+       content: [
+
+           {  text: "KalaFitness APP", style: 'header' },
+           {  text: "Reporte de pacientes registrados en el sistema\n\n", style: 'subheader' },
+           {
+               text: [
+                   {
+                       text: "Fecha: ",
+                       style: 'subItem'
+                   }, {
+                       text: today + "\n\n"
+                   }
+               ]
+           },
+           {
+               columns : [
+                   { width: '*', text: ''},
+                   {
+                       width: 'auto',
+                       table: {
+                           widths: ['auto','*','*','auto','auto'],
+                           body: body(pacientes)
+                         }
+                   },
+                   { width: '*', text: ''}
+               ]
+           }
+       ],
+       styles: {
+           header: {
+               fontSize: 18,
+               bold: true,
+               alignment: 'center',
+               color: 'blue'
+           },
+           subheader: {
+               fontSize: 14,
+               bold: true,
+               alignment: 'center',
+               color: 'blue'
+           },
+           subItem: {
+               bold: true,
+               color: 'blue'
+           },
+           tableHeader: {
+               bold: true,
+               fontSize: 13,
+               color: 'black'
+           }
+       }
+    };
+
+    pdfMake.createPdf(pdf).open();
+  };
+
+  $("#totales").click(function(){
+    $.get("/paciente/reporte/totales", function(data, status){
+      console.log(data.pacientes);
+      pdf(data.pacientes);
+    });
+  });
+
+  $("#hombres").click(function(){
+    $.get("/paciente/reporte/hombres", function(data, status){
+      console.log(data.pacientes);
+      pdf(data.pacientes);
+    });
+  });
+
+  $("#mujeres").click(function(){
+    $.get("/paciente/reporte/mujeres", function(data, status){
+      console.log(data.pacientes);
+      pdf(data.pacientes);
+    });
+  });
+
+
+</script>
+{% endblock %}

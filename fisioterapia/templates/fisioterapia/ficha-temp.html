@@ -1,0 +1,72 @@
+{%  extends 'blank.html' %}
+{% load staticfiles %}
+{% block title %}Fisioterapia - Ficha Medica{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Ficha Medica</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            Ingrese los datos para una nueva ficha
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#ficha-pills" data-toggle="tab">Ficha Kala</a>
+                                </li>
+                                <li><a href="#estado-pills" data-toggle="tab">Estado Fisico</a>
+                                </li>
+                            </ul>
+                            <form class="form-vertical" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Paciente:</label>
+                                            <select class="form-control" id="paciente_id" name="paciente" autofocus>
+                                                {% if not flag %}
+                                                    {% if pacientes %}
+                                                        {% for paciente in pacientes %}
+                                                            {% if not paciente.estado == 'I'  and not paciente.usuario.estado == 'I'%}
+                                                                <option value="{{ paciente.id }}" class="capitalize">{{ paciente.usuario.nombre }} {{ paciente.usuario.apellido }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% else%}
+                                                     <option value="{{ ficha.paciente.id }}" class="capitalize">{{ ficha.paciente.usuario.nombre }} {{ ficha.paciente.usuario.apellido }}</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% include 'fisioterapia/form_template_ficha.html' %}
+                                <!-- Tab panes -->
+                                <div class="row" style="padding-top: 20px">
+                                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                        <div class="form-group">
+                                            {%  if not flag %}
+                                                <button type="submit" class="col-md-4 col-md-offset-4 btn btn-outline btn-success">Crear ficha</button>
+                                            {%  else %}
+                                                <button type="submit" class="col-md-4 col-md-offset-4 btn btn-outline btn-success">Modificar</button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+            </div>
+    </div>
+{% endblock %}

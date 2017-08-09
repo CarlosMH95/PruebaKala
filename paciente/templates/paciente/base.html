@@ -21,7 +21,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'kalaapp:index2' %}">kala App</a>
+            <a class="navbar-brand" href="{% url 'kalaapp:home' %}">kala App</a>
         </div>
 
         <!-- Items -->
@@ -35,6 +35,11 @@
                 <li class="">
                     <a href="{% url 'paciente:paciente' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Añadir Paciente
+                    </a>
+                </li>
+                <li class="">
+                    <a href="{% url 'paciente:reportePDF' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Reporte Paciente
                     </a>
                 </li>
             </ul>
