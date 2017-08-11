@@ -22,12 +22,12 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="home">
                     <h4>Mensajes No leidos</h4>
-                        {% if mensajes %}
+                        {% if mensajesN %}
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                            {% for m in mensajes %}
+                            {% for m in mensajesN %}
                              <div class="list-group">
-                                 {% for u in usuarios %}
+                                 {% for u in usuariosN %}
                                     {% if u.usuario == m.sender %}
                                  <a href="{% url 'personal:leerMensaje' m.pk %}" class="list-group-item"> <span class="glyphicon glyphicon-envelope"> Mensaje de {{ u.nombre }} {{ u.apellido }}</span></a>
                                     {% endif %}
@@ -48,12 +48,12 @@
                     </div>
                     <div class="tab-pane fade" id="profile">
                         <h4>Mensajes Leidos</h4>
-                        {% if mensajes %}
+                        {% if mensajesL %}
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
-                            {% for m in mensajes %}
+                            {% for m in mensajesL %}
                              <div class="list-group">
-                                 {% for u in usuarios %}
+                                 {% for u in usuariosL %}
                                     {% if u.usuario == m.sender %}
                                  <a href="{% url 'personal:leerMensaje' m.pk %}" class="list-group-item"> <span class="glyphicon glyphicon-envelope"> Mensaje de {{ u.nombre }} {{ u.apellido }}</span></a>
                                     {% endif %}

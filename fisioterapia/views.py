@@ -41,7 +41,7 @@ def crear_ficha(request):
         paciente = get_object_or_404(Paciente, pk=paciente_id)
         ficha.paciente = paciente
         personal = get_object_or_404(Personal, pk=sesion.get('personal__id', 0))
-        ficha.paciente = paciente
+        ficha.personal = personal
         ficha.save()
         return HttpResponseRedirect("/fisioterapia/ficha/lista/")
     context = {
