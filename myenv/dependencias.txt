@@ -10,3 +10,4 @@ django_forms_bootstrap
 djangorestframework
 markdown
 django-filter
+django-datetime-widget

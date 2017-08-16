@@ -4,6 +4,19 @@
 {% block content %}
 <div id="page-wrapper">
     <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    {% if messages %}
+                        <div class="row messages">
+                        {% for message in messages %}
+                            <div {% if message.tags %} class="alert alert-{{ message.tags }} fade in alert-dismissable"{% endif %} style="margin-left:18px;">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                <strong>{{ message }}</strong>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                     Mensajes
@@ -23,8 +36,7 @@
                     <div class="tab-pane fade in active" id="home">
                     <h4>Mensajes No leidos</h4>
                         {% if mensajesN %}
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4">
+                        <div class="col-md-8">
                             {% for m in mensajesN %}
                              <div class="list-group">
                                  {% for u in usuariosN %}
@@ -36,21 +48,21 @@
                             {% endfor %}
 
                         </div>
-                        <div class="col-sm-4"></div>
+                        <div class="col-md-4"></div>
                         {% else %}
-                        <div class="col-sm-4"></div>
-                            <div class="col-sm-4">
-                                <div class="alert alert-info">
-                                    No se encuentran mensajes que presentar
-                                </div>
+                        <div class="col-md-8">
+                            <div class="alert alert-info">
+                                No se encuentran mensajes que presentar
                             </div>
+                        </div>
+                        <div class="col-md-4"></div>
                         {% endif %}
                     </div>
                     <div class="tab-pane fade" id="profile">
                         <h4>Mensajes Leidos</h4>
                         {% if mensajesL %}
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4">
+
+                        <div class="col-md-8">
                             {% for m in mensajesL %}
                              <div class="list-group">
                                  {% for u in usuariosL %}
@@ -62,25 +74,25 @@
 
                             {% endfor %}
                         </div>
-                                <div class="col-sm-4"></div>
+                        <div class="col-md-4"></div>
                         {% else %}
-                        <div class="col-sm-4"></div>
-                            <div class="col-sm-4">
-                                <div class="alert alert-info">
-                                    No se encuentran mensajes que presentar
-                                </div>
+                        <div class="col-md-8">
+                            <div class="alert alert-info">
+                                No se encuentran mensajes que presentar
                             </div>
-                        <div class="col-sm-4"></div>
+                        </div>
+                        <div class="col-md-4"></div>
                         {% endif %}
                     </div>
                     <div class="tab-pane fade" id="new">
                          <h4>Nuevo Mensaje</h4>
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4">
+
+                        <div class="col-md-8">
                             <a href="{% url 'personal:nuevoMensajePersonal' %}"><button type="button" class="btn btn-outline btn-primary btn-lg">A Personal</button></a>
                             <a href="{% url 'personal:nuevoMensaje' %}"><button type="button" class="btn btn-outline btn-success btn-lg" >A Paciente</button></a>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'nutricion.apps.NutricionConfig',
     'clienteRest.apps.ClienterestConfig',
     'rest_framework.authtoken',
+    'datetimewidget',
 ]
 
 MIDDLEWARE = [
@@ -146,9 +147,10 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        #'rest_framework.permissions.IsAdminUser',
     ],
-'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
