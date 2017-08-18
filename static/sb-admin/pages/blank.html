@@ -12,8 +12,8 @@
     <meta name="author" content="">
 
     <title>{% block title %}Kala Fitness App{% endblock %}</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> 
+ 
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -35,8 +35,8 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery -->
-    <!--<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>-->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
     {% block jqueryUI %}{% endblock %}
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -226,6 +226,9 @@
                                 <li>
                                     <a href="{% url 'diagnostico:CrearDiagnostico' %}">Crear</a>
                                 </li>
+                                <li>
+                                    <a href="{% url 'diagnostico:reportes' %}">Reportes</a>
+                                </li>
 
                             </ul>
 
@@ -241,19 +244,19 @@
                                     <li>
                                         <a href="{% url 'nutricion:crear_ficha' %}">Crear</a>
                                     </li>
+                                    <li>
+                                        <a href="{% url 'nutricion:reportes' %}">Reporte impreso</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-calendar"></i> Citas <span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">Ver Horarios</a>
+                                        <a href="{% url 'nutricion:ver_horarios' %}">Ver Horarios</a>
                                     </li>
                                     <li>
-                                        <a href="#">Establecer Horario</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Cancelar Cita</a>
+                                        <a href="{% url 'nutricion:crear_horario' %}">Establecer Horario</a>
                                     </li>
                                 </ul>
                             </li>
@@ -267,6 +270,9 @@
                                     <li>
                                         <a href="{% url 'fisioterapia:crear_ficha' %}">Crear</a>
                                     </li>
+                                    <li>
+                                        <a href="{% url 'fisioterapia:reportes' %}">Reporte</a>
+                                    </li>
                                 </ul>
                             <!-- /.nav-second-level -->
                             </li>
@@ -278,9 +284,6 @@
                                     </li>
                                     <li>
                                         <a href="{% url 'fisioterapia:crear_horario' %}">Establecer Horario</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Cancelar Cita</a>
                                     </li>
                                 </ul>
                             </li>
