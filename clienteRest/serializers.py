@@ -36,7 +36,7 @@ class PersonalSerializer(serializers.ModelSerializer):
 class FichaFisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ficha
-        fields = '__all__'
+        fields = ('id', 'creado', 'peso', 'imc', 'musculo', 'grasa_visceral', 'grasa_porcentaje')
 
 class FichaNutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -110,11 +110,11 @@ class DietasNestedSerializer(serializers.ModelSerializer):
 class HorarioFisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Horario
-        fields=('personal','fecha','hora','detalle','estado')
+        fields=('personal','fecha','hora','detalle','estado','id')
 class HorarioNutSerializer(serializers.ModelSerializer):
     class Meta:
         model = HorarioNut
-        fields=('personal','fecha','hora','detalle','estado')
+        fields=('personal','fecha','hora','detalle','estado','id')
 
 
 
