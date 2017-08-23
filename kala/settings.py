@@ -108,6 +108,13 @@ DATABASES = {
         'PASSWORD': 'escuela123',
         'HOST': 'kalaFitness.mysql.pythonanywhere-services.com',
     }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'kalaFitness$produccion',
+    #    'USER': 'kalaFitness',
+    #    'PASSWORD': 'escuela123',
+    #    'HOST': 'kalaFitness.mysql.pythonanywhere-services.com',
+    #}
 
 }
 

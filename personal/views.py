@@ -80,7 +80,7 @@ def nuevoPersonal(request):
         enviar_password_email(user.email, user.username, password)
         #all_personal = Usuario.objects.filter(estado="A")
         #return render(request, 'personal/index.html', {'all_personal': all_personal})
-        m.add_message(request, m.SUCCESS, 'Personal creado con exito!')
+        #m.add_message(request, m.SUCCESS, 'Personal creado con exito!')
         return redirect('personal:index')
 
     context = {
@@ -118,13 +118,14 @@ def editarPersonal(request, personal_id):
         personal.rol = rol
         personal.save()
         personal = form.save()
-        m.add_message(request, m.SUCCESS, 'Personal editado con exito!')
+        #m.add_message(request, m.SUCCESS, 'Personal editado con exito!')
         #all_personal = Usuario.objects.filter(estado="A")
         #return render(request, 'personal/index.html', {'all_personal': all_personal})
         return redirect('personal:index')
 
     context = {
         "form": form,
+        "editar": True,
     }
     return render(request, 'personal/form_personal.html', context)
 '''
@@ -149,7 +150,6 @@ def verMensajes(request):
     template= 'personal/mensajes.html'
 #separar mensajes
     mensajes=Message.objects.filter(recipient=request.user)
-    print mensajes
     if mensajes is not None:
         nombresL = []
         nombresN = []
