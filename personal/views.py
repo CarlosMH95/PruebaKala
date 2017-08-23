@@ -37,9 +37,6 @@ def eliminarPersonal(request, personal_id):
     # user.delete()
     personal.estado="I"
     personal.save()
-    #all_personal = Usuario.objects.filter(estado="A")
-    #return HttpResponse({"message": "Se elimino el personal" + personal_id}, content_type="application/json")
-    #return render(request, 'personal/index.html', {'all_personal': all_personal})
     return redirect('personal:index')
 
 '''
@@ -80,7 +77,7 @@ def nuevoPersonal(request):
         enviar_password_email(user.email, user.username, password)
         #all_personal = Usuario.objects.filter(estado="A")
         #return render(request, 'personal/index.html', {'all_personal': all_personal})
-        #m.add_message(request, m.SUCCESS, 'Personal creado con exito!')
+        me.add_message(request, m.SUCCESS, 'Personal creado con exito!')
         return redirect('personal:index')
 
     context = {
@@ -118,7 +115,7 @@ def editarPersonal(request, personal_id):
         personal.rol = rol
         personal.save()
         personal = form.save()
-        #m.add_message(request, m.SUCCESS, 'Personal editado con exito!')
+        me.add_message(request, me.SUCCESS, 'Personal editado con exito!')
         #all_personal = Usuario.objects.filter(estado="A")
         #return render(request, 'personal/index.html', {'all_personal': all_personal})
         return redirect('personal:index')
@@ -150,6 +147,7 @@ def verMensajes(request):
     template= 'personal/mensajes.html'
 #separar mensajes
     mensajes=Message.objects.filter(recipient=request.user)
+    print mensajes
     if mensajes is not None:
         nombresL = []
         nombresN = []
