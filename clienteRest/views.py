@@ -25,14 +25,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import BasicAuthentication
 
 #AUTH
-# http POST http://127.0.0.1:8000/api/api-token-auth/ -- username=carlos password=carlos123
+#
+
 #Devuelve JSON como:
 #{
   #  "token": "valorvalorvalor"
 #}
-
-
-
 
 # A todos los requerimientos agregarles'Authorization: Token valor-del-token'
 
@@ -151,7 +149,7 @@ class DietasNestedList(APIView):
 
     def get(self, request, paciente_us):
         paciente = get_object_or_404(Paciente, usuario__cedula=paciente_us)
-        diagnosticos = DiagnosticoNutricion.objects.filter(paciente=paciente, estado='A')
+        diagnosticos = DiagnosticoNutricion.objects.filter(paciente=paciente, estado='A').order_by('-id')
         response = DietasNestedSerializer(diagnosticos, many=True)
         return Response(response.data or None)
 
