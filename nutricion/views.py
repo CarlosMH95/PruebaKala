@@ -50,31 +50,9 @@ def crear_ficha(request):
 
 
 def listar_fichas(request):
-    #global fichasCache
-    #global pacientesCache
-
-    #if len(fichasCache) == 0:
     fichas = ficha_nutricion.objects.all()
-    #    fichasCache = fichas
-    #    print "desde la base"
-    #else:
-    #    fichas = fichasCache
-    #    print "desde el cache"
-
-
-    #if len(pacientesCache) == 0:
     pacientes = Paciente.objects.all()
-    #    pacientesCache = pacientes
-    #    print "desde la base"
-    #else:
-    #    pacientes = pacientesCache
-    #    print "desde el cache"
-
-
-
     template = "nutricion/listar-fichas.html"
-    #pacientes = Paciente.objects.all()
-    #fichas = ficha_nutricion.objects.all()
     context = {
         'fichas': fichas,
         "pacientes": pacientes
