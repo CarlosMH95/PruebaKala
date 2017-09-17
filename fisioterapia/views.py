@@ -52,23 +52,9 @@ def crear_ficha(request):
     return render(request, template, context)
 
 def listar_fichas(request):
-    #global fichasCache
-    #if len(fichasCache) == 0:
     fichas = Ficha.objects.all()
-    #    fichasCache = fichas
-    #    print "desde la base"
-    #else:
-    #    fichas = fichasCache
-    #    print "desde el cache"
-
     template = "fisioterapia/lista-fichas.html"
     #fichas = Ficha.objects.all()
-    print fichas
-    for ficha in fichas:
-        print ficha
-        print ficha.paciente.usuario.nombre
-        print ficha.paciente_id
-        print ficha.paciente
 
     context = {
         "fichas": fichas,
