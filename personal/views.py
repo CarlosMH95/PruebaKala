@@ -77,7 +77,7 @@ def nuevoPersonal(request):
         enviar_password_email(user.email, user.username, password)
         #all_personal = Usuario.objects.filter(estado="A")
         #return render(request, 'personal/index.html', {'all_personal': all_personal})
-        me.add_message(request, m.SUCCESS, 'Personal creado con exito!')
+        me.add_message(request, me.SUCCESS, 'Personal creado con exito!')
         return redirect('personal:index')
 
     context = {

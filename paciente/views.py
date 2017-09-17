@@ -105,7 +105,7 @@ def PacienteNuevo(request):
 
         # pacientes = Paciente.objects.all()
         # return render(request, 'paciente/index.html', {'pacientes': pacientes})
-        me.add_message(request, m.SUCCESS, 'Paciente creado con exito!')
+        me.add_message(request, me.SUCCESS, 'Paciente creado con exito!')
         return redirect('paciente:index')
     else:
         print form._errors
