@@ -26,6 +26,8 @@
     <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="{% static 'vendor/nprogress/nprogress.css' %}" rel="stylesheet">
+    <script src="{% static 'vendor/nprogress/nprogress.js' %}"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -226,7 +228,7 @@
                                     <a href="{% url 'diagnostico:CrearDiagnostico' %}">Crear</a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'diagnostico:reportes' %}">Reportes</a>
+                                    <a href="{% url 'diagnostico:reportes' %}">Reporte </a>
                                 </li>
 
                             </ul>
@@ -244,7 +246,7 @@
                                         <a href="{% url 'nutricion:crear_ficha' %}">Crear</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'nutricion:reportes' %}">Reporte impreso</a>
+                                        <a href="{% url 'nutricion:reportes' %}">Reporte</a>
                                     </li>
                                 </ul>
                             </li>

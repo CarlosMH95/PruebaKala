@@ -3,20 +3,67 @@
 {% load staticfiles %}
 {% block title %}Reportes {% endblock %}
 {% block content %}
-<div id="page-wrapper">
-  <div class="container-fluid">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+<script type="text/javascript">
+  angular.module('app', [])
+    .config(["$interpolateProvider", (fercarvo) => {
+        fercarvo.startSymbol('{[{').endSymbol('}]}');
+    }])
+    .controller('main', ["$http", "$scope", (abc, fed) => {
+        NProgress.start();
+        abc.get("/fisioterapia/reporte/fichas/")
+          .then( (res)=>{
+              fed.pacientes = res.data.pacientes;
+              console.log(fed.pacientes);
+              NProgress.done();
+
+          }, ()=>{
+            NProgress.done() 
+            alert("No se ha podido cargar la informacion")
+          })
+
+        fed.generar = (xyz) => {
+            console.log(xyz);
+            pdf(xyz);
+        }
+    }])
+</script>
+<div id="page-wrapper" ng-app="app">
+  <div class="container-fluid" ng-controller="main">
     <div class="panel panel-default" style="margin-top: 40px">
-        <div class="panel-heading"><h4><b>Reportes de ficha medica</b></h4></div>
+        <div class="panel-heading"><h4><b>Generar reporte de fisioterapia por paciente</b></h4></div>
+
         <div class="panel-body">
           <div class="container-fluid">
                 <div >
                     <div class="form-group">
-                      <label >Cedula del paciente:</label>
-                      <input class="form-control" id="cedula"></input>
+                      <input ng-model="buscar.nombre" class="form-control" placeholder="Filtrar por nombre"></input>
+                      <table style="margin-top: 15px;" class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Nombre</th>
+                              <th>Apellido</th>
+                              <th>Ocupacion</th>
+                              <th>Genero</th>
+                              <th># Fichas</th>
+                              <th style="text-align: center;">Generar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="paciente in pacientes | orderBy:'nombre' | filter:buscar">
+                              <td>{[{paciente.nombre}]}</td>
+                              <td>{[{paciente.apellido}]}</td>
+                              <td>{[{paciente.ocupacion}]}</td>
+                              <td>{[{paciente.genero}]}</td>
+                              <td>{[{paciente.data.length}]}</td>
+                              <td style="text-align: center;"><button ng-click="generar(paciente)" style="background-color:inherit;border:none;font-size: 17px;"><span class="glyphicon glyphicon-save-file"></span></button></td>
+                            </tr>
+                          </tbody>
+                        </table>
                     </div>
-                    <button id="generar" class="btn btn-default">Generar PDF</button>
                 </div>
           </div>
+
         </div>
     </div>
   </div>
@@ -24,179 +71,207 @@
 <script src="{% static 'vendor/pdfmake/pdfmake.min.js' %}"></script>
 <script src="{% static 'vendor/pdfmake/vfs_fonts.js' %}"></script>
 <script>
-  function tabla1(altura, peso, imc, musculo){
-    return [
-        [
-            {text: 'Altura', style: 'subItem'},
-            {text: 'Peso', style: 'subItem'},
-            {text: 'IMC', style: 'subItem'},
-            {text: 'Musculo', style: 'subItem'}
-        ],[
-            {text: " " + altura},
-            {text: " " + peso},
-            {text: " " + imc},
-            {text: " " + musculo}
-        ]
-    ]
-  }
-
-  function tabla2(visceral, porcentaje, flexiones, sentadillas, salto){
-    return [
-        [
-            {text: 'Grasa visceral', style: 'subItem'},
-            {text: 'Grasa porcentaje', style: 'subItem'},
-            {text: 'Flexiones', style: 'subItem'},
-            {text: 'Sentadillas', style: 'subItem'},
-            {text: 'Salto largo', style: 'subItem'}
-        ],[
-            {text: " " + visceral},
-            {text: " " + porcentaje},
-            {text: " " + flexiones},
-            {text: " " + sentadillas},
-            {text: " " + salto}
-        ]
-    ]
-  }
-
-  function tabla3(bajo, alto, espinales, lumbares, trenSuperior){
-    return [
-        [
-            {text: 'Abdomen bajo', style: 'subItem'},
-            {text: 'Abdomen alto', style: 'subItem'},
-            {text: 'Espinales', style: 'subItem'},
-            {text: 'Lumbares', style: 'subItem'},
-            {text: 'Tren SUperior', style: 'subItem'}
-        ],[
-            {text: " " + bajo},
-            {text: " " + alto},
-            {text: " " + espinales},
-            {text: " " + lumbares},
-            {text: " " + trenSuperior}
-        ]
-    ]
-  }
-
-  function pdf(data, nombre){
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    if(dd<10) {
-        dd='0'+dd
+    function ficha (array) {
+        var data = [];
+        var i=0;
+        array.forEach((d) => {
+            i++
+            data.push(
+                {text: "Ficha medica #" + i + "\n", style: 
+                    {fontSize: 15, bold: true, alignment: 'center'}
+                },{
+                    text: [
+                       {
+                           text: "Ficha Kala\n", style: {bold: true}
+                       }
+                    ]
+                },{
+                    columns : [
+                       {
+                           width: 'auto',
+                           table: {
+                               widths: ['*','*','*','*','*'],
+                               body: [
+                                        [
+                                            {text: 'Altura', style: 'subItem'},
+                                            {text: 'Peso', style: 'subItem'},
+                                            {text: 'IMC', style: 'subItem'},
+                                            {text: 'Musculo', style: 'subItem'},
+                                            {text: 'Grasa visceral', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.ficha.altura},
+                                            {text: ' '+ d.ficha.peso},
+                                            {text: ' '+ d.ficha.imc},
+                                            {text: ' '+ d.ficha.musculo},
+                                            {text: ' '+ d.ficha.grasa_visceral}
+                                        ],[
+                                            {text: 'Grasa porcentual', style: 'subItem'},
+                                            {text: 'Cuello', style: 'subItem'},
+                                            {text: 'Hombros', style: 'subItem'},
+                                            {text: 'Pecho', style: 'subItem'},
+                                            {text: 'Brazo derecho', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.ficha.grasa_porcentaje},
+                                            {text: ' '+ d.ficha.cuello},
+                                            {text: ' '+ d.ficha.hombros},
+                                            {text: ' '+ d.ficha.pecho},
+                                            {text: ' '+ d.ficha.brazo_derecho}
+                                        ],[
+                                            {text: 'Brazo I.', style: 'subItem'},
+                                            {text: 'Antegrazo D.', style: 'subItem'},
+                                            {text: 'Antebrazo I.', style: 'subItem'},
+                                            {text: 'Cintura', style: 'subItem'},
+                                            {text: 'Cadera', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.ficha.brazo_izquierdo},
+                                            {text: ' '+ d.ficha.antebrazo_derecho},
+                                            {text: ' '+ d.ficha.antebrazo_izquierdo},
+                                            {text: ' '+ d.ficha.cintura},
+                                            {text: ' '+ d.ficha.cadera}
+                                        ],[
+                                            {text: 'Muslo D.', style: 'subItem'},
+                                            {text: 'Muslo I.', style: 'subItem'},
+                                            {text: 'Pantorrilla D.', style: 'subItem'},
+                                            {text: 'Pantorrilla I.', style: 'subItem'},
+                                            {text: ' ', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.ficha.muslo_derecho},
+                                            {text: ' '+ d.ficha.muslo_izquierdo},
+                                            {text: ' '+ d.ficha.pantorrilla_derecha},
+                                            {text: ' '+ d.ficha.pantorrilla_izquierda},
+                                            {text: ' '}
+                                        ]
+                                    ]
+                             }
+                       }
+                   ]
+                },{
+                    text: [
+                       {
+                           text: "\nEstado fisico\n", style: {bold: true}
+                       }
+                    ]
+                },{
+                    columns : [
+                       {
+                           width: 'auto',
+                           table: {
+                               widths: ['*','*','*','*','*'],
+                               body: [
+                                        [
+                                            {text: 'Flexiones', style: 'subItem'},
+                                            {text: 'Sentadillas', style: 'subItem'},
+                                            {text: 'Salto Largo', style: 'subItem'},
+                                            {text: 'Suspension', style: 'subItem'},
+                                            {text: 'Abdomen bajo', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.estado_fisico.flexiones},
+                                            {text: ' '+ d.estado_fisico.sentadillas},
+                                            {text: ' '+ d.estado_fisico.saltoLargo},
+                                            {text: ' '+ d.estado_fisico.suspension},
+                                            {text: ' '+ d.estado_fisico.abdomen_bajo}
+                                        ],[
+                                            {text: 'Abdomen alto', style: 'subItem'},
+                                            {text: 'Espinales', style: 'subItem'},
+                                            {text: 'Lumbares', style: 'subItem'},
+                                            {text: 'Tren Ssperior', style: 'subItem'},
+                                            {text: 'Tren inferior', style: 'subItem'}
+                                        ],
+                                        [
+                                            {text: ' '+ d.estado_fisico.abdomen_alto},
+                                            {text: ' '+ d.estado_fisico.espinales},
+                                            {text: ' '+ d.estado_fisico.lumbares},
+                                            {text: ' '+ d.estado_fisico.trenSuperior},
+                                            {text: ' '+ d.estado_fisico.trenInferior}
+                                        ]
+                                    ]
+                             }
+                       }
+                    ]
+                },{
+                    text: [
+                       {
+                           text: "\n"
+                       }
+                    ]
+                }
+            );
+        })
+        return data;        
     }
-    if(mm<10) {
-        mm='0'+mm
-    }
-    today = mm+'/'+dd+'/'+yyyy;
 
-    var pdf = {
-       content: [
 
-           {  text: "KalaFitness APP", style: 'header' },
-           {  text: "Reporte de ficha medica de paciente\n\n", style: 'subheader' },
-           {
-               text: [
-                   {
-                       text: "Fecha: ",
-                       style: 'subItem'
-                   }, {
-                       text: today + "\n"
-                   },{
-                       text: "Nombre: ",
-                       style: 'subItem'
-                   }, {
-                       text: data.nombre + " " + data.apellido + "\n"
-                   },{
-                       text: "Cedula: ",
-                       style: 'subItem'
-                   }, {
-                       text: data.cedula + "\n\n"
-                   }
-               ]
-           },
-           {
-               columns : [
-                   {
-                       width: 'auto',
-                       table: {
-                           widths: ['*','*','*','*'],
-                           body: tabla1(data.altura, data.peso, data.imc, data.musculo)
-                         }
-                   }
-               ]
-           },{  text: "\n\n", style: 'subheader' },
-           {
-               columns : [
-                   {
-                       width: 'auto',
-                       table: {
-                           widths: ['*','*','*','*','*'],
-                           body: tabla2(data.grasa_visceral, data.grasa_porcentaje, data.flexiones, data.sentadillas, data.saltoLargo)
-                         }
-                   }
-               ]
-           },{  text: "\n\n", style: 'subheader' },
-           {
-               columns : [
-                   {
-                       width: 'auto',
-                       table: {
-                           widths: ['*','*','*','*','*'],
-                           body: tabla3(data.abdomen_bajo, data.abdomen_alto, data.espinales, data.lumbares, data.trenSuperior)
-                         }
-                   }
-               ]
-           },{  text: "\n\n", style: 'subheader' }
-       ],
-       styles: {
-           header: {
-               fontSize: 18,
-               bold: true,
-               alignment: 'center',
-               color: 'blue'
-           },
-           subheader: {
-               fontSize: 14,
-               bold: true,
-               alignment: 'center',
-               color: 'blue'
-           },
-           subItem: {
-               bold: true,
-               color: 'blue'
-           },
-           tableHeader: {
-               bold: true,
-               fontSize: 13,
-               color: 'black'
+    function pdf(paciente){
+        var today = new Date();
+        var mm = today.getMonth()+1; //January is 0!
+        today = mm+'/'+ today.getDate() +'/'+ today.getFullYear();
+
+        var pdf = {
+           content: [
+
+               {  text: "KalaFitness APP", style: 'header' },
+               {  text: "Reporte de fichas medicas por paciente\n\n", style: 'subheader' },
+               {
+                   text: [
+                       {
+                           text: "Fecha: ",
+                           style: 'subItem'
+                       }, {
+                           text: today + " \n"
+                       },{
+                           text: "Nombre: ",
+                           style: 'subItem'
+                       }, {
+                           text: paciente.nombre + " " + paciente.apellido + " \n"
+                       },{
+                           text: "Cedula: ",
+                           style: 'subItem'
+                       }, {
+                           text: paciente.cedula + " \n"
+                       },{
+                           text: "Genero: ",
+                           style: 'subItem'
+                       }, {
+                           text: paciente.genero + " \n"
+                       },{
+                           text: "Ocupacion: ",
+                           style: 'subItem'
+                       }, {
+                           text: paciente.ocupacion + " \n\n"
+                       }
+                   ]
+                },ficha(paciente.data)
+           ],
+           styles: {
+               header: {
+                   fontSize: 18,
+                   bold: true,
+                   alignment: 'center',
+                   color: 'blue'
+               },
+               subheader: {
+                   fontSize: 14,
+                   bold: true,
+                   alignment: 'center',
+                   color: 'blue'
+               },
+               subItem: {
+                   bold: true,
+                   color: 'blue'
+               },
+               tableHeader: {
+                   bold: true,
+                   fontSize: 13,
+                   color: 'black'
+               }
            }
-       }
-    };
-    pdfMake.createPdf(pdf).download(nombre);
-  };
-
-  $("#generar").click(function(){
-    var value = $('#cedula').val();
-    setTimeout(function() { alert("Generando reporte, por favor espere") }, 1);
-
-    $.ajax({
-        url: '/fisioterapia/reporte/ficha/' + value,
-        type: 'GET',
-        success: function(res){
-            console.log(value, res.data);
-            pdf(res.data, "reporte_ficha_" + value + ".pdf");
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            console.log(xhr.responseText);
-            if(xhr.status==404) {
-                alert("No existen reportes de este paciente");
-            } else {
-                alert("Algo salio mal con el servidor");
-            }
-        }
-    })
-  })
-
-
+        };
+        pdfMake.createPdf(pdf).download("reporte_Fisioterapia_" + paciente.nombre + "-" + paciente.apellido + ".pdf");
+    }
 </script>
 {% endblock %}

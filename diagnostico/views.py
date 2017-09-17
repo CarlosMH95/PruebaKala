@@ -467,12 +467,96 @@ def reporteTotal(request, paciente_cedula):
         return HttpResponseServerError("Algo salio mal")
 
 '''
+Funcion: reporte
+Entradas: Request HTTP GET
+Salidas: JSON con todos los diagnosticos y de todos los pacientes
+*Funcion que retorna la informacion de los diagnosticos de un paciente la base de datos
+en forma de un JSON*
+'''
+
+#diagnosticosCache = []
+
+@login_required
+def reporte(request):
+    #global diagnosticosCache
+    usuarios = []
+
+    try:
+        #if len(diagnosticosCache) == 0:
+        diagnosticos = DiagnosticoFisioterapia.objects.all()
+        #    diagnosticosCache = diagnosticos
+        #    print "desde la base"
+        #else:
+        #    diagnosticos = diagnosticosCache
+        #    print "desde el cache"
+
+        data = []
+        
+        for d in diagnosticos:
+            cedula = d.paciente.usuario.cedula
+            nombre = d.paciente.usuario.nombre
+            apellido = d.paciente.usuario.apellido
+            ocupacion = d.paciente.usuario.ocupacion
+            condiciones_previas = d.condiciones_previas
+            area_afectada = d.area_afectada
+            genero = d.paciente.usuario.genero
+            receta = d.receta
+            subrutinas = []
+
+            for subrutina in d.rutina.subrutina.all():
+                subrutinas.append({
+                    "nombre":subrutina.nombre, 
+                    "detalle":subrutina.detalle, 
+                    "veces":subrutina.veces, 
+                    "repeticiones":subrutina.repeticiones, 
+                    "descanso":subrutina.descanso,
+                    "link":subrutina.link
+                })
+
+            record = {
+                "cedula": cedula,
+                "condiciones_previas":condiciones_previas,
+                "area_afectada":area_afectada,
+                "apellido":apellido,
+                "nombre":nombre,
+                "ocupacion":ocupacion,
+                "genero":genero,
+                "receta":receta,
+                "subrutinas": subrutinas
+            }
+            data.append(record)
+
+        for d in data:
+            usuario = {
+                "nombre": d["nombre"],
+                "apellido": d["apellido"],
+                "cedula": d["cedula"],
+                "genero": d["genero"],
+                "ocupacion": d["ocupacion"],
+                "diagnosticos": []
+            }
+            if usuario not in usuarios:
+                usuarios.append(usuario)
+
+        for usuario in usuarios:
+             for diagnostico in data:
+                if diagnostico["cedula"]==usuario["cedula"]:
+                    usuario["diagnosticos"].append(diagnostico)
+
+        return JsonResponse({"usuarios": usuarios})
+    except Exception as e:
+        print e
+        return HttpResponseServerError("Algo salio mal")
+
+
+'''
 Funcion: reportes
 Entradas: requerimiento get http
 Salidas: Retorna un template de reportes de diagnosticos
 '''
 @login_required
 def reportes(request):
-    print "aquiiiii"
     template = 'reportes_diagnostico.html'
-    return render(request, template)
+    response = render(request, template)
+    response['Cache-Control'] = "private,max-age=600"
+    return response
